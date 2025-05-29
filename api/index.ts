@@ -23,10 +23,9 @@ app.use('/api', userRoutes);
 
 export default app;
 
-// Remove the app.listen() call. Vercel handles starting the server.
-// The PORT constant is also no longer strictly necessary for Vercel deployment,
-// but can remain for local testing with `vercel dev`.
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running locally on port ${PORT}`);
+  });
+}
