@@ -8,6 +8,9 @@ import {
     addDoc,
     setDoc,
     createUserWithEmailAndPassword,
+    query,
+    where,
+    getDocs,
     } from '../config/firebase';
 
 interface UserData {
@@ -60,19 +63,22 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { uid } = req.params;
 
-    const userDocRef = doc(db, 'users', id);
-    const userDoc = await getDoc(userDocRef);
+    const usersCollectionRef = collection(db, 'users');
+    const q = query(usersCollectionRef, where('uid', '==', uid));
+    const querySnapshot = await getDocs(q);
 
-    if (!userDoc.exists()) {
+    if (querySnapshot.empty) {
       return res.status(404).json({ message: 'User not found.' });
     }
 
+    // Assuming uid is unique, get the first matching document
+    const userDoc = querySnapshot.docs[0];
     const userData = userDoc.data() as UserData;
     res.status(200).json({ user: userData });
   } catch (error: any) {
-    console.error('Error getting user by ID:', error);
+    console.error('Error getting user by UID:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };

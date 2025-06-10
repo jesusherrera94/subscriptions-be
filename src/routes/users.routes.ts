@@ -7,6 +7,6 @@ const asyncHandler = (fn: any) => (req: Request, res: Response, next: NextFuncti
   Promise.resolve(fn(req, res, next)).catch(next);
 
 router.post('/users', asyncHandler(createUser));
-router.get('/users/:id', asyncHandler(getUserById));
+router.get('/users/:uid', asyncHandler(getUserById));
 
 export default router;

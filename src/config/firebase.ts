@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc } from 'firebase/firestore';
+import { 
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  query,
+  where,
+  getDocs, } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import dotenv from 'dotenv';
@@ -24,4 +33,16 @@ const auth = getAuth(app);
 
 console.log('Firebase Client SDK initialized successfully.');
 
-export { db, auth, collection, doc, getDoc, setDoc, addDoc, createUserWithEmailAndPassword };
+export {
+  db,
+  auth,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  createUserWithEmailAndPassword,
+  query,
+  where,
+  getDocs,
+};
