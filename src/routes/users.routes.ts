@@ -8,6 +8,6 @@ const asyncHandler = (fn: any) => (req: Request, res: Response, next: NextFuncti
 
 router.post('/users', asyncHandler(createUser));
 router.get('/users/:uid', asyncHandler(getUserById));
-router.post('/user/addcomment', asyncHandler(addOrUpdateComment));
+router.post('/users/addcomment', asyncHandler(addOrUpdateComment));
 
 export default router;
