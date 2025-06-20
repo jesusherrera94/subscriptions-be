@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { createUser, getUserById } from '../controllers/user.controller';
+import { createUser, getUserById, addOrUpdateComment } from '../controllers/user.controller';
 
 const router = Router();
 
@@ -8,5 +8,6 @@ const asyncHandler = (fn: any) => (req: Request, res: Response, next: NextFuncti
 
 router.post('/users', asyncHandler(createUser));
 router.get('/users/:uid', asyncHandler(getUserById));
+router.post('/user/addcomment', asyncHandler(addOrUpdateComment));
 
 export default router;

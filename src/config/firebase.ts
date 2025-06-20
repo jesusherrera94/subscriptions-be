@@ -8,7 +8,9 @@ import {
   addDoc,
   query,
   where,
-  getDocs, } from 'firebase/firestore';
+  getDocs,
+  updateDoc,
+} from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import dotenv from 'dotenv';
@@ -45,4 +47,5 @@ export {
   query,
   where,
   getDocs,
+  updateDoc
 };

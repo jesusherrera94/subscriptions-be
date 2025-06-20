@@ -11,6 +11,7 @@ import {
     query,
     where,
     getDocs,
+    updateDoc
     } from '../config/firebase';
 
 interface UserData {
@@ -22,6 +23,12 @@ interface UserData {
   principalInterest: string;
   profilePicture?: string;
   uid?: string;
+}
+
+interface CommentData {
+  account: string;
+  name: string;
+  comment: string;
 }
 
 export const createUser = async (req: Request, res: Response) => {
@@ -79,6 +86,41 @@ export const getUserById = async (req: Request, res: Response) => {
     res.status(200).json({ user: userData });
   } catch (error: any) {
     console.error('Error getting user by UID:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+export const addOrUpdateComment = async (req: Request, res: Response) => {
+  try {
+    const { account, name, comment } = req.body;
+
+    // Validate input
+    if (!account || typeof account !== 'string' || !/^\d{8}$/.test(account)) {
+      return res.status(400).json({ message: 'Account must be an 8-digit number string.' });
+    }
+    if (!name || typeof name !== 'string') {
+      return res.status(400).json({ message: 'Name is required.' });
+    }
+    if (!comment || typeof comment !== 'string') {
+      return res.status(400).json({ message: 'Comment is required.' });
+    }
+
+    const commentsRef = collection(db, 'comments');
+    const q = query(commentsRef, where('account', '==', account));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      // Update existing comment
+      const commentDoc = querySnapshot.docs[0];
+      await updateDoc(doc(commentsRef, commentDoc.id), { name, comment });
+      return res.status(200).json({ message: 'Comment updated successfully.' });
+    } else {
+      // Add new comment
+      await addDoc(commentsRef, { account, name, comment });
+      return res.status(201).json({ message: 'Comment added successfully.' });
+    }
+  } catch (error: any) {
+    console.error('Error adding/updating comment:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
